@@ -1,6 +1,22 @@
+import com.android.build.api.dsl.DefaultConfig
+
 plugins {
     id("com.android.application")
     kotlin("android")
+}
+
+fun DefaultConfig.applyDeviceConfig() {
+    val file = File("device.local.properties")
+    if (!file.exists()) {
+        logger.error("Create 'device.local.properties' with your device configuration")
+        return
+    }
+
+    val props = file.readLines()
+
+    buildConfigField("String", "DEVICE_IP", "\"${props[0]}\"")
+    buildConfigField("String", "DEVICE_ID", "\"${props[1]}\"")
+    buildConfigField("String", "DEVICE_LOCAL_KEY", "\"${props[2]}\"")
 }
 
 android {
@@ -15,9 +31,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "DEVICE_IP", "\"\"")
-        buildConfigField("String", "DEVICE_ID", "\"\"")
-        buildConfigField("String", "DEVICE_LOCAL_KEY", "\"\"")
+        applyDeviceConfig()
     }
 
     buildTypes {
