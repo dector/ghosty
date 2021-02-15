@@ -52,8 +52,7 @@ android {
         compose = true
     }
     composeOptions {
-        val version by extra("compose_version")
-        kotlinCompilerExtensionVersion = version
+        kotlinCompilerExtensionVersion = Version.compose
     }
 }
 
@@ -65,10 +64,9 @@ dependencies {
 
     implementation("com.google.android.material:material:1.2.1")
 
-    val composeVersion by extra("compose_version")
-    implementation("androidx.compose.ui:ui:$composeVersion")
-    implementation("androidx.compose.material:material:$composeVersion")
-    implementation("androidx.compose.ui:ui-tooling:$composeVersion")
+    implementation("androidx.compose.ui:ui:${Version.compose}")
+    implementation("androidx.compose.material:material:${Version.compose}")
+    implementation("androidx.compose.ui:ui-tooling:${Version.compose}")
     implementation("androidx.activity:activity-compose:1.3.0-alpha02")
 
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.0-alpha06")

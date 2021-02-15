@@ -1,5 +1,3 @@
-extra["compose_version"] = "1.0.0-alpha12"
-
 buildscript {
     repositories {
         google()
