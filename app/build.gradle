@@ -15,7 +15,6 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-//        applyDeviceConfig()
         buildConfigField "String", "DEVICE_IP", "\"\""
         buildConfigField "String", "DEVICE_ID", "\"\""
         buildConfigField "String", "DEVICE_LOCAL_KEY", "\"\""
