@@ -7,15 +7,18 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -78,26 +81,55 @@ private fun MainScreen(
     controller: DeviceController,
 ) {
     Surface(
-        color = MaterialTheme.colors.background,
-        modifier = Modifier.padding(8.dp),
+        color = Color.Transparent,
+        contentColor = Color.White,
+        modifier = Modifier.fillMaxSize(),
     ) {
-        Column {
-            Row {
-                Text("IP: ${controller.ip}")
-            }
-
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+        ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center,
             ) {
-                Button(onClick = { controller.turnOn() }) {
+                Text("IP: ${controller.ip}")
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+                horizontalArrangement = Arrangement.Center,
+            ) {
+                Button(
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color.Green,
+                        contentColor = Color.Black,
+                    ),
+                    onClick = { controller.turnOn() },
+                ) {
                     Text("ON")
                 }
-                Spacer(modifier = Modifier.width(4.dp))
-                Button(onClick = { controller.turnOff() }) {
+                Spacer(modifier = Modifier.width(16.dp))
+                Button(
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color.Red,
+                        contentColor = Color.Black,
+                    ),
+                    onClick = { controller.turnOff() },
+                ) {
                     Text("OFF")
                 }
             }
         }
     }
+}
+
+@Preview(name = "Main Screen", showBackground = true)
+@Composable
+private fun DefaultMainScreen() {
+    MainScreen(controller = object : DeviceController {
+        override val ip get() = "192.168.0.1"
+        override fun turnOn() = TODO()
+        override fun turnOff() = TODO()
+    })
 }
