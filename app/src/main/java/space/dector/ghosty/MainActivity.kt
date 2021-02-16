@@ -50,10 +50,7 @@ private fun MainScreen(
     ) {
         Column {
             Row {
-                // TODO add to library ability to get ip
-                val ip = BuildConfig.DEVICE_IP
-
-                Text("IP: $ip")
+                Text("IP: ${device.ip}")
             }
 
             Row(
