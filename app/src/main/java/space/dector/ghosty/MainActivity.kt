@@ -102,7 +102,7 @@ private fun MainScreen(
             ) {
                 Button(
                     colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Color.Green,
+                        backgroundColor = Color(0xFF8BC34A),
                         contentColor = Color.Black,
                     ),
                     onClick = { controller.turnOn() },
@@ -112,7 +112,7 @@ private fun MainScreen(
                 Spacer(modifier = Modifier.width(16.dp))
                 Button(
                     colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Color.Red,
+                        backgroundColor = Color(0xFFE91E63),
                         contentColor = Color.Black,
                     ),
                     onClick = { controller.turnOff() },
@@ -124,7 +124,7 @@ private fun MainScreen(
     }
 }
 
-@Preview(name = "Main Screen", showBackground = true)
+@Preview(name = "Main Screen", showBackground = true, widthDp = 300, heightDp = 150)
 @Composable
 private fun DefaultMainScreen() {
     MainScreen(controller = object : DeviceController {
