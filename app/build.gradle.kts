@@ -62,14 +62,13 @@ dependencies {
     implementation("androidx.core:core-ktx:1.3.2")
     implementation("androidx.appcompat:appcompat:1.2.0")
 
-    implementation("com.google.android.material:material:1.2.1")
-
     implementation("androidx.compose.ui:ui:${Version.compose}")
-    implementation("androidx.compose.material:material:${Version.compose}")
     implementation("androidx.compose.ui:ui-tooling:${Version.compose}")
-    implementation("androidx.activity:activity-compose:1.3.0-alpha02")
+    implementation("androidx.compose.foundation:foundation:${Version.compose}")
+    implementation("androidx.compose.material:material:${Version.compose}")
+    implementation("androidx.activity:activity-compose:1.3.0-alpha03")
 
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.0-alpha06")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.0")
 
     testImplementation("junit:junit:4.+")
 
