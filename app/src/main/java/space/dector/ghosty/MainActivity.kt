@@ -1,6 +1,7 @@
 package space.dector.ghosty
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Arrangement
@@ -23,10 +24,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import space.dector.ghosty.ui.theme.AppTheme
 import space.dector.tuyalib.Bulb
 import space.dector.tuyalib.IpAddress
@@ -35,6 +38,8 @@ import space.dector.tuyalib.IpAddress
 class MainActivity : AppCompatActivity() {
 
     private val controller = object : DeviceController {
+
+        private val TAG = "DeviceController"
 
         private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
@@ -46,17 +51,29 @@ class MainActivity : AppCompatActivity() {
 
         override val ip = device.ip
 
-        override fun turnOn() = execute {
+        override fun turnOn() = execute(
+            onFailure = ::showError,
+        ) {
             device.turnOn()
         }
 
-        override fun turnOff() = execute {
+        override fun turnOff() = execute(
+            onFailure = ::showError,
+        ) {
             device.turnOff()
         }
 
-        private fun execute(action: () -> Unit) {
+        private fun execute(
+            onFailure: (Throwable) -> Unit = {},
+            action: () -> Unit,
+        ) {
             scope.launch {
-                action()
+                runCatching {
+                    action()
+                }.onFailure {
+                    Log.e(TAG, "Action failed", it)
+                    executeOnMain { onFailure(it) }
+                }
             }
         }
     }
@@ -69,6 +86,14 @@ class MainActivity : AppCompatActivity() {
                 MainScreen(controller = controller)
             }
         }
+    }
+
+    private fun showError(throwable: Throwable) {
+        Snackbar.make(
+            window.decorView,/*.findViewById<ViewGroup>(android.R.id.content)*/
+            "Error: ${throwable.message}",
+            Snackbar.LENGTH_SHORT,
+        ).show()
     }
 }
 
@@ -101,7 +126,9 @@ private fun MainScreen(
 
             // On/Off buttons
             Row(
-                modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
                 horizontalArrangement = Arrangement.Center,
             ) {
                 Button(
@@ -127,7 +154,9 @@ private fun MainScreen(
 
             // Brightness
             Row(
-                modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -158,3 +187,5 @@ private fun DefaultMainScreen() {
         override fun turnOff() = TODO()
     })
 }
+
+suspend fun executeOnMain(action: suspend CoroutineScope.() -> Unit) = withContext(Dispatchers.Main, action)
