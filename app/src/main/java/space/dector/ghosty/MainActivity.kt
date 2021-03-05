@@ -166,7 +166,11 @@ private fun MainScreen(
             verticalArrangement = Arrangement.Center,
         ) {
             BulbView(
-                isOn = enabledStatus.value == On,
+                isOn = when (enabledStatus.value) {
+                    On -> true
+                    Off -> false
+                    Unknown -> null
+                },
             )
             Spacer(Modifier.height(8.dp))
 
@@ -254,7 +258,7 @@ private class MockedController : DeviceController {
 @Preview(group = "Components")
 @Composable
 fun BulbView(
-    isOn: Boolean = false,
+    isOn: Boolean? = null,
 ) {
     Box(
         modifier = Modifier
@@ -266,7 +270,11 @@ fun BulbView(
             contentDescription = "",
             modifier = Modifier
                 .fillMaxSize(),
-            alpha = if (isOn) 1f else 0.35f,
+            alpha = when (isOn) {
+                null -> 0.1f
+                true -> 1f
+                false -> 0.35f
+            },
         )
         Box(
             modifier = Modifier
@@ -274,11 +282,20 @@ fun BulbView(
             contentAlignment = Alignment.Center,
         ) {
             Text(
-                text = if (isOn) "ON" else "OFF",
+                text = when (isOn) {
+                    null -> "n/a"
+                    true -> "ON"
+                    false -> "OFF"
+                },
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
-                    .background(if (isOn) Color(0xFF8BC34A) else Color(0xFFE91E63))
+                    .background(
+                        when (isOn) {
+                            null -> Color(0xFF7E777A)
+                            true -> Color(0xFF8BC34A)
+                            false -> Color(0xFFE91E63)
+                        })
                     .padding(horizontal = 8.dp, vertical = 3.dp),
             )
         }
